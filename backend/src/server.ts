@@ -18,6 +18,8 @@ app.use(express.json());
 // Database connection
 import { pool } from './config/database';
 
+import authRoutes from './routes/auth';
+
 // Test database connection
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
@@ -48,6 +50,9 @@ app.get('/api/test', (req: Request, res: Response) => {
     data: 'This is a test endpoint'
   });
 });
+
+// API routes
+app.use('/api/auth', authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
