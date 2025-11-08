@@ -23,7 +23,13 @@
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
-  "keywords": ["fullstack", "nextjs", "nodejs", "typescript", "postgresql"],
+  "keywords": [
+    "fullstack",
+    "nextjs",
+    "nodejs",
+    "typescript",
+    "postgresql"
+  ],
   "author": "Your Name",
   "license": "MIT"
 }

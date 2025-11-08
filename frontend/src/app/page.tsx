@@ -1,9 +1,21 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../hooks/useAuth';
 import { useDarkMode } from '../hooks/useDarkMode';
 
 export default function Home() {
   const { darkMode, mounted, toggleDarkMode } = useDarkMode();
+  const { isAuthenticated, isLoading, user, logout } = useAuth();
+  const router = useRouter();
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (!isLoading && isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
@@ -48,7 +60,27 @@ export default function Home() {
                   </svg>
                 )}
               </button>
-              <button className="btn-primary">Get Started</button>
+              {isAuthenticated ? (
+                <>
+                  <a href="/dashboard" className="hover:opacity-80 transition-colors" style={{color: 'var(--textLight)'}}>
+                    Dashboard
+                  </a>
+                  <span className="text-sm" style={{color: 'var(--textLight)'}}>
+                    Welcome, {user?.name}
+                  </span>
+                  <button 
+                    onClick={logout}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <a href="/login" className="hover:opacity-80 transition-colors" style={{color: 'var(--textLight)'}}>Login</a>
+                  <a href="/signup" className="btn-primary">Get Started</a>
+                </>
+              )}
             </nav>
           </div>
         </div>
@@ -66,12 +98,18 @@ export default function Home() {
             analytics, and seamless integrations.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="btn-primary text-lg px-8 py-4">
+            <a 
+              href="/signup" 
+              className="btn-primary text-lg px-8 py-4 text-center"
+            >
               Start Free Trial
-            </button>
-            <button className="btn-secondary text-lg px-8 py-4">
-              Watch Demo
-            </button>
+            </a>
+            <a 
+              href="/login" 
+              className="btn-secondary text-lg px-8 py-4 text-center"
+            >
+              Sign In
+            </a>
           </div>
         </div>
 
@@ -105,33 +143,6 @@ export default function Home() {
             <p className="text-gray-600 dark:text-gray-300">
               Our expert team is always here to help you succeed.
             </p>
-          </div>
-        </div>
-
-        {/* Color Palette Demo */}
-        <div className="mt-20">
-          <h2 className="text-3xl font-bold text-center mb-8">Brand Colors</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="w-20 h-20 rounded-xl mx-auto mb-2" style={{backgroundColor: 'var(--primary)'}}></div>
-              <p className="text-sm font-medium">Primary</p>
-              <p className="text-xs text-gray-500">#4F46E5</p>
-            </div>
-            <div className="text-center">
-              <div className="w-20 h-20 rounded-xl mx-auto mb-2" style={{backgroundColor: 'var(--secondary)'}}></div>
-              <p className="text-sm font-medium">Secondary</p>
-              <p className="text-xs text-gray-500">#22D3EE</p>
-            </div>
-            <div className="text-center">
-              <div className="w-20 h-20 rounded-xl mx-auto mb-2" style={{backgroundColor: 'var(--accent)'}}></div>
-              <p className="text-sm font-medium">Accent</p>
-              <p className="text-xs text-gray-500">#FACC15</p>
-            </div>
-            <div className="text-center">
-              <div className="w-20 h-20 border-2 border-gray-200 rounded-xl mx-auto mb-2" style={{backgroundColor: 'var(--background)'}}></div>
-              <p className="text-sm font-medium">Background</p>
-              <p className="text-xs text-gray-500">#F9FAFB</p>
-            </div>
           </div>
         </div>
       </main>
