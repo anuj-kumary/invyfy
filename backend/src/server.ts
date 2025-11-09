@@ -34,6 +34,8 @@ app.use(express.json());
 import { pool } from './config/database';
 
 import authRoutes from './routes/auth';
+import projectRoutes from './routes/projects';
+import invoiceRoutes from './routes/invoices';
 
 // Test database connection
 pool.query('SELECT NOW()', (err, res) => {
@@ -68,6 +70,8 @@ app.get('/api/test', (req: Request, res: Response) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/invoices', invoiceRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
